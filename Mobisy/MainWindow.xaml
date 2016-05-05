@@ -1,0 +1,35 @@
+﻿<Window x:Class="Mobisy.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Mobisy" Top="30" Height="700" Width="1100">
+    <Grid>
+        <Grid x:Name="top_bar" HorizontalAlignment="Left" Height="40" Margin="100,0,0,0" VerticalAlignment="Top" Width="992" Background="#FFE4E4E4">
+            <Label x:Name="page_title" Content="Sell" HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Center" FontSize="16" FontWeight="Bold" FontFamily="Microsoft NeoGothic"/>
+        </Grid>
+
+        <StackPanel x:Name="nav_bar" HorizontalAlignment="Left" Height="669" VerticalAlignment="Top" Width="100" Background="#FFE4E4E4" >
+            <Button x:Name="btn_sell" Content="Sell" Height="40" FontSize="14" Background="{x:Null}" BorderBrush="#FFBFBFBF" Padding="12,1,1,1" HorizontalContentAlignment="Left" Click="sell_click" BorderThickness="0,0,0,1"/>
+            <Button x:Name="btn_sales" Content="Sales" Height="40" FontSize="14" Background="{x:Null}" BorderBrush="#FFBFBFBF" Padding="12,1,1,1" HorizontalContentAlignment="Left" Click="sales_click" BorderThickness="0,0,0,1"/>
+            <Button x:Name="btn_repairs" Content="Repairs" Height="40" FontSize="14" Background="{x:Null}" BorderBrush="#FFBFBFBF" Padding="12,1,1,1" HorizontalContentAlignment="Left" Click="repairs_click" BorderThickness="0,0,0,1"/>
+            <Button x:Name="btn_dealers" Content="Dealers" Height="40" FontSize="14" Background="{x:Null}" BorderBrush="#FFBFBFBF" Padding="12,1,1,1" HorizontalContentAlignment="Left" Click="dealers_click" BorderThickness="0,0,0,1"/>
+            <Button x:Name="btn_repairsmen" Content="Repairsmen" Height="40" FontSize="14" Background="{x:Null}" BorderBrush="#FFBFBFBF" Padding="12,1,1,1" HorizontalContentAlignment="Left" Click="repairsmen_click" BorderThickness="0,0,0,1"/>
+            <Button x:Name="btn_stock" Content="Stock" Height="40" FontSize="14" Background="{x:Null}" BorderBrush="#FFBFBFBF" Padding="12,1,1,1" HorizontalContentAlignment="Left" Click="stock_click" BorderThickness="0,0,0,1"/>
+            <Button x:Name="btn_orderlist" Content="Orderlist" Height="40" FontSize="14" Background="{x:Null}" BorderBrush="#FFBFBFBF" Padding="12,1,1,1" HorizontalContentAlignment="Left" Click="orderlist_click" BorderThickness="0,0,0,1"/>
+            <Button x:Name="btn_company" Content="Companies" Height="40" FontSize="14" Background="{x:Null}" BorderBrush="#FFBFBFBF" Padding="12,1,1,1" HorizontalContentAlignment="Left" Click="company_click" BorderThickness="0,0,0,1"/>
+            <Button x:Name="btn_notes" Content="Notes" Height="40" FontSize="14" Background="{x:Null}" BorderBrush="#FFBFBFBF" Padding="12,1,1,1" HorizontalContentAlignment="Left" Click="notes_click" BorderThickness="0,0,0,1"/>
+            <Button x:Name="btn_mobiles" Content="Mobiles" Height="40" FontSize="14" Background="{x:Null}" BorderBrush="#FFBFBFBF" Padding="12,1,1,1" HorizontalContentAlignment="Left" Click="btn_mobiles_Click" BorderThickness="0,0,0,1"/>
+            <Button x:Name="btn_logout" Content="Logout" Height="40" FontSize="14" Background="{x:Null}" BorderBrush="#FFBFBFBF" Padding="12,1,1,1" HorizontalContentAlignment="Left" Click="logout_click" BorderThickness="0,0,0,1"/>
+        </StackPanel>
+
+        <Frame x:Name="main_content" Content="" HorizontalAlignment="Left" Height="590" Margin="100,40,0,0" VerticalAlignment="Top" Width="992" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" NavigationUIVisibility="Hidden"/>
+        <Grid x:Name="foot_bar" HorizontalAlignment="Left" Height="39" Margin="101,630,0,0" VerticalAlignment="Top" Width="991" Background="#FFE4E4E4">
+            <Label Content="© 2016, Yash Patel, All Rights Reserverd" HorizontalAlignment="Left" Margin="725,1,0,0" VerticalAlignment="Top" Width="256" FontSize="14" />
+
+        </Grid>
+        <Separator HorizontalAlignment="Left" Height="1" Margin="100,39,0,0" VerticalAlignment="Top" Width="992"/>
+        <GridSplitter HorizontalAlignment="Left" Height="669" Margin="100,0,0,0" VerticalAlignment="Top" Width="1" Background="#FFBFBFBF"/>
+        <Separator HorizontalAlignment="Left" Height="1" Margin="100,630,0,0" VerticalAlignment="Top" Width="992"/>
+
+
+    </Grid>
+</Window>
