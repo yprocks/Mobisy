@@ -12,17 +12,12 @@ namespace Mobisy.AppCodes
         MySqlConnection cnn;
 
         public MyConnection()
-        {
-
-        }
-
+        {}
 
         public MySqlConnection GetConnection(){
-
             string myConnectionString = "server=localhost;user id=root;database=mobisy;allowuservariables=True";
             cnn = new MySqlConnection (myConnectionString);
             return cnn;
-
         }
     }
 }

@@ -89,11 +89,7 @@ namespace Mobisy
             main_content.Content = null;
         }
 
-        private void search_click(object sender, RoutedEventArgs e)
-        {
-            page_title.Content = "Search";
-            main_content.Content = null;
-        }
+
 
         private void logout_click(object sender, RoutedEventArgs e)
         {
@@ -104,7 +100,9 @@ namespace Mobisy
 
         private void btn_mobiles_Click(object sender, RoutedEventArgs e)
         {
-
+            page_title.Content = "Mobiles";
+            main_content.Content = null;
+            main_content.Content = new Mobiles();
         }
     }
 }

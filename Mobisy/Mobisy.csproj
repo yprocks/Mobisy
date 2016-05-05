@@ -84,6 +84,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="AppPages\Mobiles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="AppPages\Repairs.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -113,6 +117,9 @@
     <Compile Include="AppCodes\Mobile.cs" />
     <Compile Include="AppCodes\MyConnection.cs" />
     <Compile Include="AppCodes\Repair.cs" />
+    <Compile Include="AppPages\Mobiles.xaml.cs">
+      <DependentUpon>Mobiles.xaml</DependentUpon>
+    </Compile>
     <Compile Include="AppPages\Repairs.xaml.cs">
       <DependentUpon>Repairs.xaml</DependentUpon>
     </Compile>
