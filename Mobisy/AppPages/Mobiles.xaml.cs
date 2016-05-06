@@ -30,23 +30,36 @@ namespace Mobisy.AppPages
         Repair rp;
         MySqlDataAdapter adapter;
         DataSet dataset;
-        int r_id;
+        Mobile mobile;
 
-        bool dateValid, validRpman, validRprice, validMobile, validProblem, validCustphone, validCustname, validCustprice;
+        string company;
+
+        bool isMobileValid;
+        bool compSelected, nameSelected, dealerSelected, validImei, validCP, validSP;
+
 
         public Mobiles()
         {
             InitializeComponent();
             mycon1 = new MyConnection();
+            mycon2 = new MyConnection();
+            mycon3 = new MyConnection();
 
             id = new ID();
-            LoadRepairsmen();
-            dateValid = validRprice = validRpman = validMobile = validProblem = validCustname = validCustprice = false;
-            validCustphone = true;
-            tb_repair_date.Text = GetDate();
-            r_id = 0;
+  
+            company = "";
+            isMobileValid  = false;
+            compSelected = nameSelected = dealerSelected = validCP = validImei = validSP = false;
+
+            PopulateCompanies();
+  
+            mobile = new Mobile();
             rp = new Repair();
-            LoadRepairs(0);
+            tb_search.Text = "";
+
+            PopulateDealerSort();
+      
+            LoadMobiles(0, 0, tb_search.Text);
 
         }
 
@@ -55,61 +68,71 @@ namespace Mobisy.AppPages
             return System.DateTime.Now.Date.ToString("yyyy-MM-dd");
         }
 
-        private void add_rep_click(object sender, RoutedEventArgs e)
+        private void view_mob_click(object sender, RoutedEventArgs e)
         {
-            add_repair_tab.Background = Brushes.LightGray;
-            view_reapir_tab.Background = Brushes.Transparent;
-
-            add_rep_panel.Visibility = System.Windows.Visibility.Visible;
-            view_panel.Visibility = System.Windows.Visibility.Hidden;
-
-            LoadRepairsmen();
-
-        }
-
-        private void view_rep_click(object sender, RoutedEventArgs e)
-        {
-            view_reapir_tab.Background = Brushes.LightGray;
-            add_repair_tab.Background = Brushes.Transparent;
+            view_mobile_tab.Background = Brushes.LightGray;
+            add_mobile_tab.Background = Brushes.Transparent;
 
             view_panel.Visibility = System.Windows.Visibility.Visible;
-            add_rep_panel.Visibility = System.Windows.Visibility.Hidden;
+            add_mob_panel.Visibility = System.Windows.Visibility.Hidden;
 
         }
 
-        private void LoadRepairsmen()
+        private void add_mob_click(object sender, RoutedEventArgs e)
         {
+            add_mobile_tab.Background = Brushes.LightGray;
+            view_mobile_tab.Background = Brushes.Transparent;
+
+            add_mob_panel.Visibility = System.Windows.Visibility.Visible;
+            view_panel.Visibility = System.Windows.Visibility.Hidden;
+
+            MobilePanel();
+            Reset();
+        }
+
+        // popup data in mobile panel
+
+        private void MobilePanel()
+        {
+            PopulateCompanies();
+        }
+
+        // Populates Companies
+        private void PopulateCompanies()
+        {
+
             con1 = mycon1.GetConnection();
             try
             {
                 con1.Open();
 
                 //MessageBox.Show("Connection Open ! ");
-
                 MySqlCommand cmd = con1.CreateCommand();
-                cmd.CommandText = "SELECT repairsman_name from repairsman";
+                cmd.CommandText = "SELECT company_name from company";
 
                 MySqlDataReader reader = cmd.ExecuteReader();
 
-                cb_rpman.Items.Clear();
+                cb_company.Items.Clear();
 
                 if (reader.HasRows)
                 {
-
-                    cb_rpman.Items.Add("Select");
+                    cb_company.Items.Add("Select");
 
                     while (reader.Read())
                     {
                         //companies.Add(reader.GetString(0));
-                        cb_rpman.Items.Add(reader[0]);
+                        cb_company.Items.Add(reader[0]);
                     }
                     //cb_company.ItemsSource = companies;
+
+                    //  cb_company.SelectedValue = cb_company.Items[0];
                 }
                 else
                 {
-                    cb_rpman.Items.Add("No Repairsman Found");
+                    cb_company.Items.Add("No Company found");
                 }
-                cb_rpman.SelectedIndex = 0;
+
+                cb_company.SelectedIndex = 0;
 
                 con1.Close();
             }
@@ -117,230 +140,415 @@ namespace Mobisy.AppPages
             {
                 MessageBox.Show("Can not open connection ! " + ex.Message);
             }
+
         }
 
-        private void tb_mobile_TextChanged(object sender, TextChangedEventArgs e)
+        // company select event handler
+        private void cb_company_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (String.IsNullOrEmpty(tb_mobile.Text))
+            if (cb_company.SelectedIndex != 0)
             {
-                validMobile = false;
+                company = (string)cb_company.SelectedValue;
+                PopulateMobiles(company);
+                compSelected = true;
+                // MessageBox.Show("In");
             }
             else
             {
-                validMobile = true;
+                cb_family.Items.Clear();
+                cb_dealer.Items.Clear();
+                compSelected = false;
             }
         }
 
-        private void tb_problem_TextChanged(object sender, TextChangedEventArgs e)
+        //populate mobiles
+        private void PopulateMobiles(String c_name)
         {
-            if (String.IsNullOrEmpty(tb_problem.Text))
-            {
-                validProblem = false;
-            }
-            else
-            {
-                validProblem = true;
-            }
-        }
 
-        private void tb_rpman_price_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (String.IsNullOrEmpty(tb_rpman_price.Text))
-            {
-                validRprice = false;
-            }
-            else
-            {
-                validRprice = true;
-            }
-        }
+            int cid = id.GetCompanyID(c_name);
 
-        private void tb_cust_price_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (String.IsNullOrEmpty(tb_cust_price.Text))
+            con2 = mycon2.GetConnection();
+            try
             {
-                validCustprice = false;
-            }
-            else
-            {
-                validCustprice = true;
-            }
-        }
+                con2.Open();
 
-        private void tb_cust_name_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (String.IsNullOrEmpty(tb_cust_name.Text))
-            {
-                validCustname = false;
-            }
-            else
-            {
-                validCustname = true;
-            }
-        }
+                //MessageBox.Show("Connection Open ! ");
+                MySqlCommand cmd = con2.CreateCommand();
+                cmd.CommandText = "SELECT family_name from family where company_id = " + cid;
 
-        private void tb_cust_phone_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (String.IsNullOrEmpty(tb_cust_phone.Text))
-            { 
-                validCustphone = true;
-            }
-            else
-            {
-                if (tb_cust_phone.Text.Length == 10)
+                MySqlDataReader reader = cmd.ExecuteReader();
+
+                cb_family.Items.Clear();
+
+                if (reader.HasRows)
                 {
-                    validCustphone = true;
+                    cb_family.Items.Add("Select");
+
+                    while (reader.Read())
+                    {
+                        //companies.Add(reader.GetString(0));
+                        cb_family.Items.Add(reader[0]);
+
+                    }
+                    //  cb_family.SelectedValue = cb_family.Items[0];
+                    //cb_company.ItemsSource = companies;
                 }
                 else
                 {
-                    validCustphone = false;
+                    cb_family.Items.Add("No mobiles found");
                 }
+
+                cb_family.SelectedIndex = 0;
+
+                con2.Close();
+            }
+            catch (MySqlException ex)
+            {
+                MessageBox.Show("Can not open connection ! " + ex.Message);
             }
         }
 
-        private void tb_repair_date_TextChanged(object sender, TextChangedEventArgs e)
-        {        
-
-            if (tb_repair_date.Text.Length > 7)
-            {
-                dateValid = true;
-            }
-            else
-            {
-                dateValid = false;
-            }
-        }
-
-        private void btn_rep_reset_Click(object sender, RoutedEventArgs e)
+        // On Mobile name selected
+        private void cb_family_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Reset();
-        }
-
-        private void btn_rep_add_Click(object sender, RoutedEventArgs e)
-        {
-            if (dateValid && validMobile && validProblem && CheckRpmanSelected() && validRprice && validCustprice && validCustname && validCustphone)
+            if (cb_family.SelectedIndex != 0)
             {
-                r_id = id.GetRepairsmanID(cb_rpman.Text.ToString());
-
-                if (rp.AddRepair(r_id, tb_mobile.Text, tb_problem.Text, Convert.ToInt32(tb_rpman_price.Text.ToString()), Convert.ToInt32(tb_cust_price.Text.ToString()), tb_cust_name.Text, tb_cust_phone.Text, tb_repair_date.Text)) {
-                    MessageBox.Show("Mobile added to Repairs");
-                    Reset();
-                }else
-	            {
-                     MessageBox.Show("Something went wrong");
-	            }
-
-            }else
-	        {
-                MessageBox.Show("Please check all fields");
-	        }
-        }
-
-        private bool CheckRpmanSelected()
-        {
-            if (cb_rpman.SelectedIndex != 0)
-            {
-                validRpman = true;
+                PopulateDealers();
+                nameSelected = true;
             }
             else
             {
-                validRpman = false;
+                cb_dealer.Items.Clear();
+                nameSelected = false;
             }
-
-            return validRpman;
         }
 
-        private void Reset()
+        // Populate all dealers
+        private void PopulateDealers()
         {
+            con3 = mycon3.GetConnection();
+            try
+            {
+                con3.Open();
 
-            cb_rpman.SelectedIndex = 0;
+                //MessageBox.Show("Connection Open ! ");
+                MySqlCommand cmd = con3.CreateCommand();
+                cmd.CommandText = "SELECT dealer_name FROM dealer";
 
-            tb_cust_price.Text = "";
-            tb_mobile.Text = "";
-            tb_problem.Text = "";
-            tb_cust_name.Text = "";
-            tb_cust_phone.Text = "";
-            tb_repair_date.Text = GetDate();
-            tb_rpman_price.Text = "";
-        }
+                MySqlDataReader reader = cmd.ExecuteReader();
 
-        private void tb_repair_date_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
+                cb_dealer.Items.Clear();
 
-            if (e.Key == Key.Back) e.Handled = false;
-
-            if (tb_repair_date.SelectionStart > 0) { 
-            
-                if (tb_repair_date.Text[tb_repair_date.SelectionStart - 1] == '/')
+                if (reader.HasRows)
                 {
-                    if (e.Key == Key.Back)
+                    cb_dealer.Items.Add("Select");
+                   
+                    while (reader.Read())
                     {
-                        e.Handled = true;
+                        //companies.Add(reader.GetString(0));
+                        cb_dealer.Items.Add(reader[0]);
+
                     }
+                    //    cb_dealer.SelectedValue = cb_family.Items[0];
+                    //cb_company.ItemsSource = companies;
                 }
-                
+                else
+                {
+                    cb_dealer.Items.Add("No dealer found");
+                }
+
+                cb_dealer.SelectedIndex = 0;
+                con3.Close();
             }
-            
-
-            if (e.Key == Key.Delete) e.Handled = true;
-            
-            if (e.Key == Key.Space) e.Handled = true;
-
-           
+            catch (MySqlException ex)
+            {
+                MessageBox.Show("Can not open connection ! " + ex.Message);
+            }
         }
 
-        private void tb_number_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        private void tb_imei_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
+
             char c = Convert.ToChar(e.Text);
-
-            if (Char.IsDigit(c))
-            {
+            if (Char.IsNumber(c) && tb_imei.Text.Length < 16)
                 e.Handled = false;
-
-            } else
-            {
+            else
                 e.Handled = true;
-            }
 
             base.OnPreviewTextInput(e);
 
         }
 
-        
-        /**************************View***Repairs******************************/
+        private void tb_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Space) e.Handled = true;
+        }
 
+        private void tb_costprice_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            char c = Convert.ToChar(e.Text);
+            if (Char.IsNumber(c) && tb_costprice.Text.Length < 5)
+                e.Handled = false;
+            else
+                e.Handled = true;
+
+            base.OnPreviewTextInput(e);
+
+
+
+        }
+
+        private void tb_sellprice_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            char c = Convert.ToChar(e.Text);
+            if (Char.IsNumber(c) && tb_sellprice.Text.Length < 5)
+                e.Handled = false;
+            else
+                e.Handled = true;
+
+            base.OnPreviewTextInput(e);
+
+
+        }
+
+        private void cb_dealer_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cb_dealer.SelectedIndex != 0)
+            {
+                dealerSelected = true;
+            }
+            else
+            {
+                dealerSelected = false;
+            }
+        }
+
+        private void tb_imei_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (tb_imei.Text.Length >= 14)
+            {
+                validImei = true;
+            }
+            else
+            {
+                validImei = false;
+            }
+        }
+
+        private void tb_costprice_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (String.IsNullOrEmpty(tb_costprice.Text))
+            {
+                validCP = false;
+            }
+            else
+            {
+                validCP = true;
+            }
+        }
+
+        private void tb_sellprice_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+
+            if (String.IsNullOrEmpty(tb_sellprice.Text))
+            {
+                validSP = false;
+            }
+            else
+            {
+                validSP = true;
+            }
+
+        }
+
+        // Check if all inputs are valid to enter mobile details 
+        private bool IsMobileValid()
+        {
+            if (compSelected && nameSelected && dealerSelected && validCP && validImei && validSP)
+            {
+                isMobileValid = true;
+            }
+            else
+            {
+                isMobileValid = false;
+            }
+
+            return isMobileValid;
+        }
+
+        private void btn_mob_add_Click(object sender, RoutedEventArgs e)
+        {
+            if (IsMobileValid())
+            {
+
+                if (mobile.AddMobile(
+                    cb_family.SelectedValue.ToString(),
+                    cb_dealer.SelectedValue.ToString(),
+                    tb_imei.Text.ToString(),
+                    Convert.ToInt16(tb_costprice.Text.ToString()),
+                    Convert.ToInt16(tb_sellprice.Text.ToString()),
+                    tb_missingparts.Text.ToString()
+                    ))
+                    MessageBox.Show("Mobile Added");
+                else
+                    MessageBox.Show("Something went wrong: \n Check if Already Added");
+            }
+            else
+            {
+                MessageBox.Show("Please check all fields");
+            }
+        }
+
+        private void btn_reset_Click(object sender, RoutedEventArgs e)
+        {
+            Reset();
+        }
+
+        private void btn_mob_sell_Click(object sender, RoutedEventArgs e)
+        {
+            // Add to mobile with sell id 1 and add to sales too
+            // Make Method Direct Sell instead of sell and call methods add and update mobile then Sell method
+            if (IsMobileValid())
+            {
+
+
+
+                if (mobile.DirectSellMobile(
+                    cb_family.SelectedValue.ToString(),
+                    cb_dealer.SelectedValue.ToString(),
+                    tb_imei.Text.ToString(),
+                    Convert.ToInt16(tb_costprice.Text.ToString()),
+                    Convert.ToInt16(tb_sellprice.Text.ToString()),
+                    tb_missingparts.Text.ToString(),
+                    tb_cust_name.Text,
+                    tb_cust_phone.Text
+                    ))
+                    MessageBox.Show("Mobile Added and Sold");
+                else
+                    MessageBox.Show("Something went wrong: \n Check if Already Sold");
+            }
+            else
+            {
+                MessageBox.Show("Please check all fields");
+            }
+
+        }
+
+        private void Reset()
+        {
+            cb_company.SelectedIndex = 0;
+            tb_costprice.Text = "";
+            tb_imei.Text = "";
+            tb_sellprice.Text = "";
+            tb_missingparts.Text = "";
+        
+        }
+        
+        /**************************View***Mobiles******************************/
+
+        private String DealerSoldAllQuery(string search, int d_id)
+        {
+            
+            if (d_id == 0)
+                 return "SELECT mobile_id, family.family_name, dealer.dealer_name, imei, dealer_price, selling_price, " +
+                   "DATE_FORMAT(date_added,'%y-%m-%d') as date_added, isExchanged, exchanged_imei, isReturned, problem, isSold " +
+                   "from mobile join family on family.family_id = mobile.family_id join dealer ON dealer.dealer_id = mobile.dealer_id " +
+                   "where imei LIKE '%" + search + "%' OR family_name LIKE '%" + search + "%' OR date_added LIKE '%" + search + "%' Order by DATE(date_added) DESC";
+            else
+                return "SELECT mobile_id, family.family_name, dealer.dealer_name, imei, dealer_price, selling_price, " +
+                   "DATE_FORMAT(date_added,'%y-%m-%d') as date_added, isExchanged, exchanged_imei, isReturned, problem, isSold " +
+                   "from mobile join family on family.family_id = mobile.family_id join dealer ON dealer.dealer_id = mobile.dealer_id " +
+                   "where (imei LIKE '%" + search + "%' OR family_name LIKE '%" + search + "%' OR date_added LIKE '%" + search + "%' ) AND mobile.dealer_id = " +  d_id + " Order by DATE(date_added) DESC";
+        }
+
+        private String DealersSoldQuery(int d_id, int is_sold, string search)
+        {
+            if(d_id == 0)
+                return "SELECT mobile_id, family.family_name, dealer.dealer_name, imei, dealer_price, selling_price, " +
+                   "DATE_FORMAT(date_added,'%y-%m-%d') as date_added, isExchanged, exchanged_imei, isReturned, problem, isSold " +
+                   "from mobile join family on family.family_id = mobile.family_id join dealer ON dealer.dealer_id = mobile.dealer_id " +
+                   "where isSold = 1 AND (imei LIKE '%" + search + "%' OR family_name LIKE '%" + search + "%' OR date_added LIKE '%" + search + "%' ) Order by DATE(date_added) DESC";
+            else
+                return "SELECT mobile_id, family.family_name, dealer.dealer_name, imei, dealer_price, selling_price, " +
+                    "DATE_FORMAT(date_added,'%y-%m-%d') as date_added, isExchanged, exchanged_imei, isReturned, problem, isSold " +
+                    "from mobile join family on family.family_id = mobile.family_id join dealer ON dealer.dealer_id = mobile.dealer_id " +
+                    "where isSold = 1 AND (imei LIKE '%" + search + "%' OR family_name LIKE '%" + search + "%' OR date_added LIKE '%" + search + "%' ) AND mobile.dealer_id = " + d_id + " Order by DATE(date_added) DESC";
+           
+        }
+
+        private String DealersUnsoldQuery(int d_id, int is_sold, string search)
+        {
+            if (d_id == 0)
+                  return "SELECT mobile_id, family.family_name, dealer.dealer_name, imei, dealer_price, selling_price, " +
+                     "DATE_FORMAT(date_added,'%y-%m-%d') as date_added, isExchanged, exchanged_imei, isReturned, problem, isSold " +
+                     "from mobile join family on family.family_id = mobile.family_id join dealer ON dealer.dealer_id = mobile.dealer_id " +
+                     "where isSold = 0 AND ( imei LIKE '%" + search + "%' OR family_name LIKE '%" + search + "%' OR date_added LIKE '%" + search + "%') Order by DATE(date_added) DESC";
+            else
+                  return "SELECT mobile_id, family.family_name, dealer.dealer_name, imei, dealer_price, selling_price, " +
+                     "DATE_FORMAT(date_added,'%y-%m-%d') as date_added, isExchanged, exchanged_imei, isReturned, problem, isSold " +
+                     "from mobile join family on family.family_id = mobile.family_id join dealer ON dealer.dealer_id = mobile.dealer_id " +
+                     "where isSold = 0 AND (imei LIKE '%" + search + "%' OR family_name LIKE '%" + search + "%' OR date_added LIKE '%" + search + "%') AND mobile.dealer_id = " + d_id + " Order by DATE(date_added) DESC";
+           
+        }
+
+       /* private String SearchRepairsQuery()
+        {
+            return "SELECT repairs_id, mobile_name, cust_name, cust_phone, repairsman_name, mobile_problem, repairsman_price, cust_price, " +
+                   "DATE_FORMAT(date_added,'%y-%m-%d') as date_added, DATE_FORMAT(fixing_date,'%y-%m-%d') as fixing_date, isRepaired, isPaid, isRemoved " +
+                   "from repairs JOIN repairsman on repairsman.repairsman_id = repairs.repairsman_id " +
+                   "where mobile_name LIKE '%" + tb_search.Text + "%' OR cust_name LIKE '%" + tb_search.Text + "%' OR cust_phone = '" + tb_search.Text + "' " +
+                   "OR repairsman_name Like '%" + tb_search.Text + "%' OR fixing_date LIKE '%" + tb_search.Text + "%' OR date_added LIKE '%" + tb_search.Text + "%'";
+        }*/
 
         private void LoadAdapter(string queryString, MySqlConnection con)
         {
-
             adapter = new MySqlDataAdapter(queryString, con);
-            dataset = new DataSet();
-            
+            dataset = new DataSet();   
         }
 
-        private void LoadRepairs(int value)
+        private void LoadMobiles(int d_value, int s_value, string search)
         {
             mycon2 = new MyConnection();
             con2 = mycon2.GetConnection();
-            // MySqlCommand cmd = dbConn.CreateCommand();
-            // cmd.CommandText = "SELECT * from demobase";
-            if (value == 0)
-                LoadAdapter(TodaysRepairsQuery(), con2);
-            else if (value == 1)
-                LoadAdapter(PendingRepairsQuery(), con2);
-            else if (value == 2)
-                LoadAdapter(AllRepairsQuery(), con2);
-            else if (value == 3)
-                LoadAdapter(SearchRepairsQuery(), con2);
+            
+            //System.Diagnostics.Debug.WriteLine(" " + d_value + " " + s_value + " " + search );
 
+            if (d_value == 0 && s_value == 0){
+                LoadAdapter(DealerSoldAllQuery(search, 0), con2);
+            //    System.Diagnostics.Debug.WriteLine("1");
+            }
+            else if (s_value != 0 && d_value == 0) {
+             //   System.Diagnostics.Debug.WriteLine("1");
+                if (s_value == 1)
+                    LoadAdapter(DealersSoldQuery(0, 1, search), con2);
+                else if (s_value == 2)
+                    LoadAdapter(DealersUnsoldQuery(0, 0, search), con2);
+            }
+            else if (s_value != 0 && d_value != 0)
+            {
+                if (s_value == 1)
+                    LoadAdapter(DealersSoldQuery(d_value, 1, search), con2);
+                else if (s_value == 2)
+                    LoadAdapter(DealersUnsoldQuery(d_value, 0, search), con2);
+            }
+            else if (s_value == 0 && d_value != 0)
+            {
+                LoadAdapter(DealerSoldAllQuery(search, d_value), con2);
+            }
+            else
+            {
+                LoadAdapter(DealerSoldAllQuery(search, 0), con2);
+            }
 
             try
             {
                 con2.Open();
-                adapter.Fill(dataset, "repairs");
+                adapter.Fill(dataset, "mobiles");
               
                 dgrid_repairs.ItemsSource = dataset.Tables[0].DefaultView;
-                cb_rprman.ItemsSource = GetReparismanList();
+                cb_dealerName.ItemsSource = GetDealersList();
+                cb_mobileName.ItemsSource = GetFamilyName();
 
             }
             catch (MySqlException erro)
@@ -352,9 +560,9 @@ namespace Mobisy.AppPages
             con2.Close();
         }
 
-        private List<String> GetReparismanList()
+        private List<String> GetDealersList()
         {
-            List<String> rp_list = new List<String>();
+            List<String> dl_list = new List<String>();
 
             mycon3 = new MyConnection();
             con3 = mycon3.GetConnection();
@@ -365,15 +573,14 @@ namespace Mobisy.AppPages
                 //MessageBox.Show("Connection Open ! ");
 
                 MySqlCommand cmd = con3.CreateCommand();
-                cmd.CommandText = "SELECT repairsman_name from repairsman";
+                cmd.CommandText = "SELECT dealer_name from dealer";
 
                 MySqlDataReader reader = cmd.ExecuteReader();
-
 
                 while (reader.Read())
                 {
                         //companies.Add(reader.GetString(0));
-                   rp_list.Add(reader.GetString(0));
+                         dl_list.Add(reader.GetString(0));
                 }
                     //cb_company.ItemsSource = companies;
 
@@ -384,7 +591,84 @@ namespace Mobisy.AppPages
 
             }
 
-            return rp_list;
+            return dl_list;
+        }
+
+        private void PopulateDealerSort()
+        {
+            con3 = mycon3.GetConnection();
+            try
+            {
+                con3.Open();
+
+                //MessageBox.Show("Connection Open ! ");
+                MySqlCommand cmd = con3.CreateCommand();
+                cmd.CommandText = "SELECT dealer_name FROM dealer order by dealer_id";
+
+                MySqlDataReader reader = cmd.ExecuteReader();
+
+                cb_dealerSort.Items.Clear();
+
+                if (reader.HasRows)
+                {
+                    cb_dealerSort.Items.Add("All");
+
+                    while (reader.Read())
+                    {
+                        //companies.Add(reader.GetString(0));
+                        cb_dealerSort.Items.Add(reader[0]);
+                     //   System.Diagnostics.Debug.WriteLine("Dsada + " + reader[0]);
+                    }
+                    //    cb_dealer.SelectedValue = cb_family.Items[0];
+                    //cb_company.ItemsSource = companies;
+                }
+                else
+                {
+                    cb_dealerSort.Items.Add("No dealer found");
+                }
+                
+                cb_dealerSort.SelectedIndex = 0;
+                con3.Close();
+            }
+            catch (MySqlException ex)
+            {
+                MessageBox.Show("Can not open connection ! " + ex.Message);
+            }
+        }
+
+        private List<String> GetFamilyName()
+        {
+            List<String> fname_list = new List<String>();
+
+            mycon3 = new MyConnection();
+            con3 = mycon3.GetConnection();
+            try
+            {
+                con3.Open();
+
+                //MessageBox.Show("Connection Open ! ");
+
+                MySqlCommand cmd = con3.CreateCommand();
+                cmd.CommandText = "SELECT family_name from family";
+
+                MySqlDataReader reader = cmd.ExecuteReader();
+
+
+                while (reader.Read())
+                {
+                    //companies.Add(reader.GetString(0));
+                    fname_list.Add(reader.GetString(0));
+                }
+                //cb_company.ItemsSource = companies;
+
+                con3.Close();
+            }
+            catch (Exception e)
+            {
+
+            }
+
+            return fname_list;
         }
 
         private void dgrid_repairs_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -422,7 +706,7 @@ namespace Mobisy.AppPages
                     Convert.ToInt32(repair_fields[12])
                 );
 
-                LoadRepairs(cb_dateSelector.SelectedIndex);
+//                LoadMobiles(cb_dealerSort.SelectedIndex);
 
                //  MessageBox.Show(rpman_id + " " + repair_fields[4]);
                //  msqlcmbl = new MySqlCommandBuilder(adapter);
@@ -436,73 +720,46 @@ namespace Mobisy.AppPages
             }
         }
 
-        private String TodaysRepairsQuery()
-        {
-            return "SELECT repairs_id, mobile_name, cust_name, cust_phone, repairsman_name, mobile_problem, repairsman_price, cust_price, " +
-                   "DATE_FORMAT(date_added,'%y-%m-%d') as date_added, DATE_FORMAT(fixing_date,'%y-%m-%d') as fixing_date, isRepaired, isPaid, isRemoved " + 
-                   "from repairs JOIN repairsman on repairsman.repairsman_id = repairs.repairsman_id where DATE(date_added) = '"+ GetDate() +"' and isRemoved = 0";
-        }
-
-        private String PendingRepairsQuery()
-        {
-            return "SELECT repairs_id, mobile_name, cust_name, cust_phone, repairsman_name, mobile_problem, repairsman_price, cust_price, " +
-                   "DATE_FORMAT(date_added,'%y-%m-%d') as date_added, DATE_FORMAT(fixing_date,'%y-%m-%d') as fixing_date, isRepaired, isPaid, isRemoved " +
-                   "from repairs JOIN repairsman on repairsman.repairsman_id = repairs.repairsman_id where isPaid = 0 and isRemoved = 0";
-        }
-
-        private String AllRepairsQuery()
-        {
-            return "SELECT repairs_id, mobile_name, cust_name, cust_phone, repairsman_name, mobile_problem, repairsman_price, cust_price, " +
-                   "DATE_FORMAT(date_added,'%y-%m-%d') as date_added, DATE_FORMAT(fixing_date,'%y-%m-%d') as fixing_date, isRepaired, isPaid, isRemoved " +
-                   "from repairs JOIN repairsman on repairsman.repairsman_id = repairs.repairsman_id";
-        }
-
-        private String SearchRepairsQuery()
-        {
-            return "SELECT repairs_id, mobile_name, cust_name, cust_phone, repairsman_name, mobile_problem, repairsman_price, cust_price, " +
-                   "DATE_FORMAT(date_added,'%y-%m-%d') as date_added, DATE_FORMAT(fixing_date,'%y-%m-%d') as fixing_date, isRepaired, isPaid, isRemoved " +
-                   "from repairs JOIN repairsman on repairsman.repairsman_id = repairs.repairsman_id " +
-                   "where mobile_name LIKE '%" + tb_search.Text + "%' OR cust_name LIKE '%" + tb_search.Text + "%' OR cust_phone = '" + tb_search.Text + "' " +
-                   "OR repairsman_name Like '%" + tb_search.Text + "%' OR fixing_date LIKE '%" + tb_search.Text + "%' OR date_added LIKE '%" + tb_search.Text + "%'";
-        }
-
         private void btn_view_reset_Click(object sender, RoutedEventArgs e)
         {
-            LoadRepairs(0);
-            cb_dateSelector.SelectedIndex = 0;
+            LoadMobiles(0, 0, "");
+            cb_dealerSort.SelectedIndex = 0;
             tb_search.Text = "";
-        }
-
-
-        // Sorting date and fate
-        private void cb_dateSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-          //  LoadData();
-           // LoadRepairs();
-            if (cb_dateSelector.SelectedIndex == 1)
-            {
-                LoadRepairs(1);
-            }
-            else if (cb_dateSelector.SelectedIndex == 2)
-            {
-                LoadRepairs(2);
-            }
-            else if (cb_dateSelector.SelectedIndex == 0)
-            {
-                LoadRepairs(0);
-            }
         }
 
         private void tb_search_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
-            {
-                if(!String.IsNullOrEmpty(tb_search.Text)){
-                    cb_dateSelector.SelectedIndex = 2;
-                    LoadRepairs(3);
-                }
+            {    
+              LoadMobiles(cb_dealerSort.SelectedIndex, cb_soldSort.SelectedIndex, tb_search.Text);
             }
         }
+
+        private void cb_dealerSort_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+           if (cb_dealerSort.SelectedIndex > 0)
+            {
+                LoadMobiles(cb_dealerSort.SelectedIndex, cb_soldSort.SelectedIndex, tb_search.Text);
+            }
+            else
+            {
+                LoadMobiles(0, cb_soldSort.SelectedIndex, tb_search.Text);
+            }
+        }
+
+        private void cb_soldSort_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cb_soldSort.SelectedIndex > 0)
+            {
+                LoadMobiles(cb_dealerSort.SelectedIndex, cb_soldSort.SelectedIndex, tb_search.Text);
+            }
+            else
+            {
+                LoadMobiles(cb_dealerSort.SelectedIndex, 0, tb_search.Text);
+            }
+        }
+
+    
 
     }
 }

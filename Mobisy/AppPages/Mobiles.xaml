@@ -8,68 +8,71 @@
 	Title="Stock" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" >
 
     <Grid>
-        <Grid x:Name="add_rep_panel" HorizontalAlignment="Left" Height="514" Margin="40,45,0,0" VerticalAlignment="Top" Width="910" Visibility="Hidden" >
-            <Label Content="Mobile" HorizontalAlignment="Left" Margin="320,31,0,0" VerticalAlignment="Top" Height="30" FontSize="14"/>
-            <Label Content="Problem" HorizontalAlignment="Left" Margin="320,62,0,0" VerticalAlignment="Top" FontSize="14"/>
-            <Label Content="Repairsman" HorizontalAlignment="Left" Margin="320,93,0,0" VerticalAlignment="Top" FontSize="14" />
-            <Label Content="Customer Price" HorizontalAlignment="Left" Margin="320,163,0,0" VerticalAlignment="Top" FontSize="14" />
-            <Label Content="Repairsman Price" HorizontalAlignment="Left" Margin="320,129,0,0" VerticalAlignment="Top" FontSize="14" RenderTransformOrigin="0.552,0.116" />
-            <Label Content="Fixing Date" HorizontalAlignment="Left" Margin="320,265,0,0" VerticalAlignment="Top" FontSize="14" />
+        <Grid x:Name="add_mob_panel" HorizontalAlignment="Left" Height="514" Margin="40,40,0,0" VerticalAlignment="Top" Width="910" Visibility="Hidden" >
+            <Label Content="Company" HorizontalAlignment="Left" Margin="339,31,0,0" VerticalAlignment="Top" Height="30" FontSize="14"/>
+            <Label Content="Name" HorizontalAlignment="Left" Margin="339,62,0,0" VerticalAlignment="Top" FontSize="14"/>
+            <Label Content="Dealer" HorizontalAlignment="Left" Margin="339,93,0,0" VerticalAlignment="Top" FontSize="14"/>
+            <Label Content="IMEI" HorizontalAlignment="Left" Margin="339,124,0,0" VerticalAlignment="Top" FontSize="14"/>
+            <Label Content="Selling Price" HorizontalAlignment="Left" Margin="339,186,0,0" VerticalAlignment="Top" FontSize="14"/>
+            <Label Content="Cost Price" HorizontalAlignment="Left" Margin="339,155,0,0" VerticalAlignment="Top" FontSize="14"/>
+            <Label Content="Missing Parts" HorizontalAlignment="Left" Margin="339,217,0,0" VerticalAlignment="Top" FontSize="14"/>
 
+            <ComboBox x:Name="cb_company"  SelectedIndex="0" HorizontalAlignment="Left" Margin="458,32,0,0" VerticalAlignment="Top" Width="150" Height="25" FontSize="14" SelectionChanged="cb_company_SelectionChanged"/>
+            <ComboBox x:Name="cb_family" SelectedIndex="0" HorizontalAlignment="Left" Margin="458,63,0,0" VerticalAlignment="Top" Width="150" Height="25" FontSize="14" SelectionChanged="cb_family_SelectionChanged"/>
+            <ComboBox x:Name="cb_dealer" SelectedIndex="0"  HorizontalAlignment="Left" Margin="458,94,0,0" VerticalAlignment="Top" Width="150" Height="25" FontSize="14" SelectionChanged="cb_dealer_SelectionChanged"/>
+            <TextBox x:Name="tb_imei" HorizontalAlignment="Left" Height="25"  Margin="458,124,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150" PreviewTextInput="tb_imei_PreviewTextInput" PreviewKeyDown="tb_PreviewKeyDown" FontSize="14" TextChanged="tb_imei_TextChanged"/>
+            <TextBox x:Name="tb_costprice" HorizontalAlignment="Left" Height="25" Margin="458,155,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150" RenderTransformOrigin="0.508,1.174" FontSize="14" PreviewTextInput="tb_costprice_PreviewTextInput" PreviewKeyDown="tb_PreviewKeyDown" TextChanged="tb_costprice_TextChanged"/>
+            <TextBox x:Name="tb_sellprice" HorizontalAlignment="Left" Height="25" Margin="458,186,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150" RenderTransformOrigin="0.508,1.174" FontSize="14" PreviewTextInput="tb_sellprice_PreviewTextInput" PreviewKeyDown="tb_PreviewKeyDown" TextChanged="tb_sellprice_TextChanged"/>
+            <TextBox x:Name="tb_missingparts" HorizontalAlignment="Left" Height="25" Margin="458,217,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150" RenderTransformOrigin="0.508,1.174" FontSize="14"/>
+            <Button x:Name="btn_mob_reset" Content="Reset" HorizontalAlignment="Left" Margin="359,335,0,0" VerticalAlignment="Top" Width="75" Height="30" FontSize="14" Click="btn_reset_Click"/>
+            <Button x:Name="btn_mob_add" Content="Add" HorizontalAlignment="Left" Margin="519,335,0,0" VerticalAlignment="Top" Width="75" Height="30" FontSize="14" Click="btn_mob_add_Click"/>
+            <Button x:Name="btn_mob_sell" Content="Sell" HorizontalAlignment="Left" Margin="439,335,0,0" VerticalAlignment="Top" Width="75" Height="30" FontSize="14" Click="btn_mob_sell_Click"/>
 
-            <TextBox x:Name="tb_mobile" HorizontalAlignment="Left" Margin="440,32,0,0" VerticalAlignment="Top" Width="150" Height="25" FontSize="14" TextChanged="tb_mobile_TextChanged" />
-            <TextBox x:Name="tb_problem" HorizontalAlignment="Left" Margin="440,63,0,0" VerticalAlignment="Top" Width="150" Height="25" FontSize="14" TextChanged="tb_problem_TextChanged"/>
-            <ComboBox x:Name="cb_rpman" HorizontalAlignment="Left" Margin="440,94,0,0" VerticalAlignment="Top" Width="150" Height="25" FontSize="14"/>
-            <TextBox x:Name="tb_rpman_price" HorizontalAlignment="Left" Height="25" Margin="440,131,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150" FontSize="14" RenderTransformOrigin="0.508,1.174" TextChanged="tb_rpman_price_TextChanged" PreviewTextInput="tb_number_PreviewTextInput" />
-            <TextBox x:Name="tb_cust_price" HorizontalAlignment="Left" Height="25" Margin="440,165,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150" FontSize="14" RenderTransformOrigin="0.508,1.174" TextChanged="tb_cust_price_TextChanged" PreviewTextInput="tb_number_PreviewTextInput" />
-
-            <Label Content="Customer Name" HorizontalAlignment="Left" Margin="320,197,0,0" VerticalAlignment="Top" FontSize="14"/>
-            <TextBox x:Name="tb_cust_name" HorizontalAlignment="Left" Height="25" Margin="440,199,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150" FontSize="14" RenderTransformOrigin="0.508,1.174" TextChanged="tb_cust_name_TextChanged" />
-            <Label Content="Customer Phone" HorizontalAlignment="Left" Margin="320,231,0,0" VerticalAlignment="Top" FontSize="14" />
-            <TextBox x:Name="tb_cust_phone" HorizontalAlignment="Left" Height="25" Margin="440,233,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150" FontSize="14" RenderTransformOrigin="0.508,1.174" TextChanged="tb_cust_phone_TextChanged" PreviewTextInput="tb_number_PreviewTextInput" />
-            <TextBox x:Name="tb_repair_date" HorizontalAlignment="Left" Height="25" Margin="440,267,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150" FontSize="14" RenderTransformOrigin="0.508,1.174" TextChanged="tb_repair_date_TextChanged" PreviewKeyDown="tb_repair_date_PreviewKeyDown" PreviewTextInput="tb_number_PreviewTextInput"/>
-
-            <Button x:Name="btn_rep_reset" Content="Reset" HorizontalAlignment="Left" Margin="434,327,0,0" VerticalAlignment="Top" Width="76" Height="30" FontSize="14" Click="btn_rep_reset_Click" />
-            <Button x:Name="btn_rep_add" Content="Add" HorizontalAlignment="Left" Margin="514,327,0,0" VerticalAlignment="Top" Width="76" Height="30" FontSize="14" Click="btn_rep_add_Click" />
+            <Label Content="Customer Name" HorizontalAlignment="Left" Margin="339,251,0,0" VerticalAlignment="Top" FontSize="14"/>
+            <Label Content="Customer Phone" HorizontalAlignment="Left" Margin="339,285,0,0" VerticalAlignment="Top" FontSize="14"/>
+            <TextBox x:Name="tb_cust_name" HorizontalAlignment="Left" Height="23" Margin="458,255,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150" FontSize="14"/>
+            <TextBox x:Name="tb_cust_phone" HorizontalAlignment="Left" Height="23" Margin="458,289,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150" FontSize="14"/>
 
         </Grid>
 
         <Grid x:Name="view_panel" HorizontalAlignment="Left" Height="540" Margin="40,40,0,0" VerticalAlignment="Top" Width="910">
-            <DataGrid x:Name="dgrid_repairs" HorizontalAlignment="Left" Margin="0,53,0,0" VerticalAlignment="Top" Height="445" Width="908" FontSize="12" AreRowDetailsFrozen="True"  AlternatingRowBackground="#FFD8D8D8" CanUserResizeRows="False" CanUserAddRows="False" AutoGenerateColumns="False" PreviewKeyDown="dgrid_repairs_PreviewKeyDown" >
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="R_ID" Visibility="Hidden" Binding="{Binding repairs_id}" />
-                    <DataGridTextColumn Header="Mobile" Binding="{Binding mobile_name}" />
-                    <DataGridTextColumn Header="Customer name" Binding="{Binding cust_name}" />
-                    <DataGridTextColumn Header="Phone Number" Binding="{Binding cust_phone}" />
-                    <DataGridComboBoxColumn x:Name="cb_rprman" Header="Repairsman"   SelectedValueBinding="{Binding repairsman_name}" />
-                    <DataGridTextColumn Header="Problem" Binding="{Binding mobile_problem}" />
-                    <DataGridTextColumn Header="Reparisman price" Binding="{Binding repairsman_price}" />
-                    <DataGridTextColumn Header="Customer Price" Binding="{Binding cust_price}" />
-                    <DataGridTextColumn Header="Date Added" Binding="{Binding date_added}" />
-                    <DataGridTextColumn Header="Fixing Date" Binding="{Binding fixing_date}" />
-                    <DataGridCheckBoxColumn Header="Repaired" Binding="{Binding isRepaired}" />
-                    <DataGridCheckBoxColumn Header="Paid" Binding="{Binding isPaid}" />
-                    <DataGridCheckBoxColumn Header="Remove" Binding="{Binding isRemoved}" />
-                </DataGrid.Columns>
-            </DataGrid>
-            <ComboBox x:Name="cb_dateSelector" HorizontalAlignment="Left" Margin="117,12,0,0" VerticalAlignment="Top" Width="120" SelectedIndex="0" FontSize="14" SelectionChanged="cb_dateSelector_SelectionChanged">
-                <ComboBoxItem Content="Today"></ComboBoxItem>
-                <ComboBoxItem Content="Pending"></ComboBoxItem>
-                <ComboBoxItem Content="All"></ComboBoxItem>
-            </ComboBox>
-            <Label Content="Showing Repairs" FontSize="14" HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top"/>
             <Label Content="Search" HorizontalAlignment="Left" Margin="725,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.737,0.538" FontSize="14"/>
             <TextBox x:Name="tb_search" FontSize="14" HorizontalAlignment="Left" Height="23" Margin="781,14,-90,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" PreviewKeyDown="tb_search_PreviewKeyDown"/>
 
+            <DataGrid FontSize="14" x:Name="dgrid_repairs" HorizontalAlignment="Left" Margin="0,53,0,0" VerticalAlignment="Top" Height="445" Width="908"  AreRowDetailsFrozen="True"  AlternatingRowBackground="#FFD8D8D8" CanUserResizeRows="False" CanUserAddRows="False" AutoGenerateColumns="False" PreviewKeyDown="dgrid_repairs_PreviewKeyDown" >
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="M_ID" Visibility="Hidden" Binding="{Binding mobile_id}" />
+                    <DataGridComboBoxColumn x:Name="cb_mobileName" Header="Mobile" SelectedValueBinding="{Binding family_name}"/>
+                    <DataGridComboBoxColumn x:Name="cb_dealerName" Header="dealer_name"   SelectedValueBinding="{Binding dealer_name}" />
+                    <DataGridTextColumn Header="IMEI" Binding="{Binding imei}" />
+                    <DataGridTextColumn Header="Cost Price" Binding="{Binding dealer_price}" />
+                    <DataGridTextColumn Header="Selling Price" Binding="{Binding selling_price}" />
+                    <DataGridTextColumn Header="Date Added" Binding="{Binding date_added}" />
+                    <DataGridCheckBoxColumn Header="Exchanged" Binding="{Binding isExchanged}" />
+                    <DataGridTextColumn Header="Exchanged IMEI" Binding="{Binding exchanged_imei}" />
+                    <DataGridCheckBoxColumn Header="Returned" Binding="{Binding isReturned}" />
+                    <DataGridTextColumn Header="Problem" Binding="{Binding problem}" />
+                    <DataGridCheckBoxColumn Header="Sold" Binding="{Binding isSold}" />
+                </DataGrid.Columns>
+            </DataGrid>
+            <ComboBox x:Name="cb_dealerSort" HorizontalAlignment="Left" Margin="61,12,0,0" VerticalAlignment="Top" Width="120" SelectedIndex="0" FontSize="14" SelectionChanged="cb_dealerSort_SelectionChanged"/>
+            <Label Content="Dealers" FontSize="14" HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top"/>
+           
             <Button x:Name="btn_update" Content="Update" HorizontalAlignment="Left" Margin="831,503,0,-12" VerticalAlignment="Top" Width="76" FontSize="14" Click="btn_update_Click"/>
             <Button x:Name="btn_view_reset" Content="Reset" HorizontalAlignment="Left" Margin="740,503,0,0" VerticalAlignment="Top" Width="76" RenderTransformOrigin="0.033,0.5" FontSize="14" Click="btn_view_reset_Click"/>
+            <Label Content="Sort" HorizontalAlignment="Left" Margin="208,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.471,0.238" FontSize="14" />
+            <ComboBox x:Name="cb_soldSort" HorizontalAlignment="Left" Margin="248,12,0,0" VerticalAlignment="Top" Width="120" FontSize="14" SelectedIndex="0" SelectionChanged="cb_soldSort_SelectionChanged">
+                <ComboBoxItem Content="All"></ComboBoxItem>
+                <ComboBoxItem Content="Sold"></ComboBoxItem>
+                <ComboBoxItem Content="Unsold"></ComboBoxItem>
+            </ComboBox>
 
         </Grid>
 
         <Separator HorizontalAlignment="Left" Height="1" Margin="0,39,0,0" VerticalAlignment="Top" Width="990"/>
         <Grid HorizontalAlignment="Left" Height="40"  Margin="40,0,0,0" VerticalAlignment="Top" Width="910">
-            <Button x:Name="add_repair_tab" Content="Add" Height="40" VerticalAlignment="Center" Width="98" HorizontalAlignment="Center" Margin="461,0,351,0" BorderThickness="0,0,0,1" BorderBrush="{x:Null}" FontSize="14" Click="add_rep_click" Background="{x:Null}"/>
-            <Button x:Name="view_reapir_tab" Content="View"  Height="40" HorizontalAlignment="Center"  Margin="362,0,449,0" VerticalAlignment="Center" Width="99"  BorderThickness="0,0,0,1" BorderBrush="{x:Null}"   Background="LightGray" FontSize="14" Click="view_rep_click" />
+            <Button x:Name="add_mobile_tab" Content="Add" Height="40" VerticalAlignment="Center" Width="98" HorizontalAlignment="Center" Margin="461,0,351,0" BorderThickness="0,0,0,1" BorderBrush="{x:Null}" FontSize="14" Click="add_mob_click" Background="{x:Null}"/>
+            <Button x:Name="view_mobile_tab" Content="View"  Height="40" HorizontalAlignment="Center"  Margin="362,0,449,0" VerticalAlignment="Center" Width="99"  BorderThickness="0,0,0,1" BorderBrush="{x:Null}"   Background="LightGray" FontSize="14" Click="view_mob_click" />
         </Grid>
     </Grid>
 </Page>
