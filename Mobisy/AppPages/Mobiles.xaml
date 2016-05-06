@@ -39,11 +39,11 @@
             <Label Content="Search" HorizontalAlignment="Left" Margin="725,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.737,0.538" FontSize="14"/>
             <TextBox x:Name="tb_search" FontSize="14" HorizontalAlignment="Left" Height="23" Margin="781,14,-90,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" PreviewKeyDown="tb_search_PreviewKeyDown"/>
 
-            <DataGrid FontSize="14" x:Name="dgrid_repairs" HorizontalAlignment="Left" Margin="0,53,0,0" VerticalAlignment="Top" Height="445" Width="908"  AreRowDetailsFrozen="True"  AlternatingRowBackground="#FFD8D8D8" CanUserResizeRows="False" CanUserAddRows="False" AutoGenerateColumns="False" PreviewKeyDown="dgrid_repairs_PreviewKeyDown" >
+            <DataGrid FontSize="14" x:Name="dgrid_mobiles" HorizontalAlignment="Left" Margin="0,53,0,0" VerticalAlignment="Top" Height="445" Width="908"  AreRowDetailsFrozen="True"  AlternatingRowBackground="#FFD8D8D8" CanUserResizeRows="False" CanUserAddRows="False" AutoGenerateColumns="False" PreviewKeyDown="dgrid_repairs_PreviewKeyDown" >
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="M_ID" Visibility="Hidden" Binding="{Binding mobile_id}" />
                     <DataGridComboBoxColumn x:Name="cb_mobileName" Header="Mobile" SelectedValueBinding="{Binding family_name}"/>
-                    <DataGridComboBoxColumn x:Name="cb_dealerName" Header="dealer_name"   SelectedValueBinding="{Binding dealer_name}" />
+                    <DataGridComboBoxColumn x:Name="cb_dealerName" Header="Dealer"   SelectedValueBinding="{Binding dealer_name}" />
                     <DataGridTextColumn Header="IMEI" Binding="{Binding imei}" />
                     <DataGridTextColumn Header="Cost Price" Binding="{Binding dealer_price}" />
                     <DataGridTextColumn Header="Selling Price" Binding="{Binding selling_price}" />
@@ -52,20 +52,23 @@
                     <DataGridTextColumn Header="Exchanged IMEI" Binding="{Binding exchanged_imei}" />
                     <DataGridCheckBoxColumn Header="Returned" Binding="{Binding isReturned}" />
                     <DataGridTextColumn Header="Problem" Binding="{Binding problem}" />
-                    <DataGridCheckBoxColumn Header="Sold" Binding="{Binding isSold}" />
+                    <DataGridCheckBoxColumn Header="Sold" Binding="{Binding isSold}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Sign" IsReadOnly="True"/>
                 </DataGrid.Columns>
             </DataGrid>
             <ComboBox x:Name="cb_dealerSort" HorizontalAlignment="Left" Margin="61,12,0,0" VerticalAlignment="Top" Width="120" SelectedIndex="0" FontSize="14" SelectionChanged="cb_dealerSort_SelectionChanged"/>
             <Label Content="Dealers" FontSize="14" HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top"/>
-           
-            <Button x:Name="btn_update" Content="Update" HorizontalAlignment="Left" Margin="831,503,0,-12" VerticalAlignment="Top" Width="76" FontSize="14" Click="btn_update_Click"/>
-            <Button x:Name="btn_view_reset" Content="Reset" HorizontalAlignment="Left" Margin="740,503,0,0" VerticalAlignment="Top" Width="76" RenderTransformOrigin="0.033,0.5" FontSize="14" Click="btn_view_reset_Click"/>
+
+            <Button x:Name="btn_update" Content="Update" HorizontalAlignment="Left" Margin="831,503,0,0" VerticalAlignment="Top" Width="76" FontSize="14" Click="btn_update_Click"/>
+            <Button x:Name="btn_view_reset" Content="Reset" HorizontalAlignment="Left" Margin="750,503,0,0" VerticalAlignment="Top" Width="76" RenderTransformOrigin="0.033,0.5" FontSize="14" Click="btn_view_reset_Click"/>
             <Label Content="Sort" HorizontalAlignment="Left" Margin="208,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.471,0.238" FontSize="14" />
             <ComboBox x:Name="cb_soldSort" HorizontalAlignment="Left" Margin="248,12,0,0" VerticalAlignment="Top" Width="120" FontSize="14" SelectedIndex="0" SelectionChanged="cb_soldSort_SelectionChanged">
                 <ComboBoxItem Content="All"></ComboBoxItem>
                 <ComboBoxItem Content="Sold"></ComboBoxItem>
                 <ComboBoxItem Content="Unsold"></ComboBoxItem>
             </ComboBox>
+            <Button x:Name="btn_print" Content="Print" FontSize="14" HorizontalAlignment="Left" Margin="670,503,0,14" Width="75" Click="btn_print_Click"/>
+            <Button Visibility="Hidden" x:Name="btn_savePDF" Content="Save PDF" FontSize="14" HorizontalAlignment="Left" Margin="591,504,0,13" Width="75" Click="btn_savePDF_Click"/>
 
         </Grid>
 

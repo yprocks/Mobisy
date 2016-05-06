@@ -27,7 +27,6 @@ namespace Mobisy.AppPages
         MyConnection mycon1, mycon2, mycon3;
         MySqlConnection con1, con2, con3;
         ID id;
-        Repair rp;
         MySqlDataAdapter adapter;
         DataSet dataset;
         Mobile mobile;
@@ -54,7 +53,7 @@ namespace Mobisy.AppPages
             PopulateCompanies();
   
             mobile = new Mobile();
-            rp = new Repair();
+
             tb_search.Text = "";
 
             PopulateDealerSort();
@@ -492,14 +491,7 @@ namespace Mobisy.AppPages
            
         }
 
-       /* private String SearchRepairsQuery()
-        {
-            return "SELECT repairs_id, mobile_name, cust_name, cust_phone, repairsman_name, mobile_problem, repairsman_price, cust_price, " +
-                   "DATE_FORMAT(date_added,'%y-%m-%d') as date_added, DATE_FORMAT(fixing_date,'%y-%m-%d') as fixing_date, isRepaired, isPaid, isRemoved " +
-                   "from repairs JOIN repairsman on repairsman.repairsman_id = repairs.repairsman_id " +
-                   "where mobile_name LIKE '%" + tb_search.Text + "%' OR cust_name LIKE '%" + tb_search.Text + "%' OR cust_phone = '" + tb_search.Text + "' " +
-                   "OR repairsman_name Like '%" + tb_search.Text + "%' OR fixing_date LIKE '%" + tb_search.Text + "%' OR date_added LIKE '%" + tb_search.Text + "%'";
-        }*/
+    
 
         private void LoadAdapter(string queryString, MySqlConnection con)
         {
@@ -545,8 +537,8 @@ namespace Mobisy.AppPages
             {
                 con2.Open();
                 adapter.Fill(dataset, "mobiles");
-              
-                dgrid_repairs.ItemsSource = dataset.Tables[0].DefaultView;
+                
+                dgrid_mobiles.ItemsSource = dataset.Tables[0].DefaultView;
                 cb_dealerName.ItemsSource = GetDealersList();
                 cb_mobileName.ItemsSource = GetFamilyName();
 
@@ -680,38 +672,33 @@ namespace Mobisy.AppPages
         {
             try
             {
-                DataRowView drv = (DataRowView)dgrid_repairs.SelectedItem;
-                String[] repair_fields = new String[13];
+                DataRowView drv = (DataRowView)dgrid_mobiles.SelectedItem;
+                String[] mobile_fields = new String[11];
 
-                for (int i = 0; i < 13; i++)
+                for (int i = 0; i < 11; i++)
                 {
-                    repair_fields[i] = (drv.Row[i]).ToString().Trim();
+                    mobile_fields[i] = (drv.Row[i]).ToString();
                 }
 
-                int rpman_id = id.GetRepairsmanID(repair_fields[4]);
+                int family_id = id.GetFamilyID(mobile_fields[1]);
+                int dealer_id = id.GetDealerID(mobile_fields[2]);
 
-                rp.UpdateRepair(
-                    Convert.ToInt32(repair_fields[0]),
-                    rpman_id,
-                    repair_fields[1],
-                    repair_fields[2],
-                    repair_fields[3],
-                    repair_fields[5],
-                    Convert.ToInt32(repair_fields[6]),
-                    Convert.ToInt32(repair_fields[7]),
-                    repair_fields[8],
-                    repair_fields[9],
-                    Convert.ToInt32(repair_fields[10]),
-                    Convert.ToInt32(repair_fields[11]),
-                    Convert.ToInt32(repair_fields[12])
+               // System.Diagnostics.Debug.WriteLine("" + mobile_fields[0] + " " + mobile_fields[2] + " " + mobile_fields[10]);
+
+                mobile.UpdateMobile(
+                    Convert.ToInt32(mobile_fields[0]),
+                    family_id,
+                    dealer_id,
+                    mobile_fields[3],
+                    Convert.ToInt32(mobile_fields[4]),
+                    Convert.ToInt32(mobile_fields[5]),
+                    mobile_fields[6],
+                    Convert.ToInt32(mobile_fields[7]),
+                    mobile_fields[8],
+                    Convert.ToInt32(mobile_fields[9]),
+                    mobile_fields[10]
                 );
-
-//                LoadMobiles(cb_dealerSort.SelectedIndex);
-
-               //  MessageBox.Show(rpman_id + " " + repair_fields[4]);
-               //  msqlcmbl = new MySqlCommandBuilder(adapter);
-               //  adapter.Update(dataset, "repairsToday");    
-   
+ 
             }
             catch (Exception ex)
             {
@@ -759,7 +746,19 @@ namespace Mobisy.AppPages
             }
         }
 
-    
+        private void btn_print_Click(object sender, RoutedEventArgs e)
+        {
+            PrintDialog printDialog = new PrintDialog();
+            if (printDialog.ShowDialog() == true)
+            {
+                printDialog.PrintVisual(dgrid_mobiles, "My First Print Job");
+            }
+        }
+
+        private void btn_savePDF_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
 
     }
 }

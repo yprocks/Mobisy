@@ -201,6 +201,27 @@ namespace Mobisy.AppCodes
             }
         }
 
+        public void UpdateMobile(int m_id, int f_id, int d_id, string imei, int c_price, int s_price, string date_added, int isExchanged, string exchangedIMEI, int isReturned, string problem)
+        {
+            try
+            {
+                con = mycon.GetConnection();
+
+                string query = "UPDATE mobile SET family_id = " + f_id + ", dealer_id = " + d_id + ", imei = '" + imei + "', dealer_price = " + c_price + ", selling_price = " + s_price  + ", date_added = '" + date_added + "', isExchanged = " + isExchanged + ", exchanged_imei = '" + exchangedIMEI + "', isReturned = " + isReturned + ", problem = '" + problem + "' WHERE mobile_id = " + m_id;
+                // System.Diagnostics.Debug.WriteLine("At Pass1");
+
+                MySqlCommand cmd = new MySqlCommand(query, con);
+
+                con.Open();
+                cmd.ExecuteNonQuery();
+                con.Close();
+
+            }
+            catch (MySqlException ex)
+            {
+                System.Diagnostics.Debug.WriteLine("" + ex.Message);
+            }
+        }
 
         private String GetDate()
         {

@@ -56,7 +56,7 @@ namespace Mobisy.AppCodes
 
         public void UpdateRepair(int r_id, int rpman_id, string mobile_name, string cust_name, string cust_phone, string problem, int rpman_price, int cust_price, string date_added, string fixing_date, int isRepaired, int isPaid, int isRemoved)
         {
-            System.Diagnostics.Debug.WriteLine(" "+ r_id + " " + rpman_id + " " + mobile_name + " " + cust_name + " " + cust_phone + " " + problem + " " + rpman_price + " " + cust_price + " " + date_added + " " + fixing_date + " " + isRepaired + " " + isPaid);
+           // System.Diagnostics.Debug.WriteLine(" "+ r_id + " " + rpman_id + " " + mobile_name + " " + cust_name + " " + cust_phone + " " + problem + " " + rpman_price + " " + cust_price + " " + date_added + " " + fixing_date + " " + isRepaired + " " + isPaid);
             try
             {
                 con = mycon.GetConnection();
