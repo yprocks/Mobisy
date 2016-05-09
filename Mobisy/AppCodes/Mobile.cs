@@ -10,7 +10,7 @@ namespace Mobisy.AppCodes
     class Mobile
     {
         MyConnection mycon;
-        MySqlConnection con;
+        MySqlConnection con, con1;
         ID id;
         int sp, cp;
 
@@ -222,6 +222,41 @@ namespace Mobisy.AppCodes
                 System.Diagnostics.Debug.WriteLine("" + ex.Message);
             }
         }
+
+        public void UpdateSales(int m_id, string cust_name, string cust_phone, int selling_price)
+        {
+            try
+            {
+                con = mycon.GetConnection();
+
+                string query = "UPDATE mobile SET selling_price = " + selling_price + " WHERE mobile_id = " + m_id;
+                // System.Diagnostics.Debug.WriteLine("At Pass1");
+
+                MySqlCommand cmd = new MySqlCommand(query, con);
+
+                con.Open();
+                cmd.ExecuteNonQuery();
+                con.Close();
+
+
+                con1 = mycon.GetConnection();
+
+                string query1 = "UPDATE customer SET cust_name = " + cust_name + ", cust_phone = " + cust_phone + " WHERE customer.mobile_id = " + m_id;
+                // System.Diagnostics.Debug.WriteLine("At Pass1");
+
+                MySqlCommand cmd1 = new MySqlCommand(query1, con1);
+
+                con.Open();
+                cmd.ExecuteNonQuery();
+                con.Close();
+
+            }
+            catch (MySqlException ex)
+            {
+                System.Diagnostics.Debug.WriteLine("" + ex.Message);
+            }
+        }
+
 
         private String GetDate()
         {

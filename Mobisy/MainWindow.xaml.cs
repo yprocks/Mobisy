@@ -35,13 +35,14 @@ namespace Mobisy
         {
             page_title.Content = "Sell";
             main_content.Content = null;
-            main_content.Content = new Sell(); ;
+            main_content.Content = new Sell(); 
         }
 
         private void sales_click(object sender, RoutedEventArgs e)
         {
             page_title.Content = "Sales";
             main_content.Content = null;
+            main_content.Content = new Sales();
         }
 
         private void repairs_click(object sender, RoutedEventArgs e)

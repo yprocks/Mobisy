@@ -52,14 +52,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Mobisy.exe" size="81408">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Mobisy.exe" size="96768">
       <assemblyIdentity name="Mobisy" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>xWRarCXPlBp6pG7uakMrSuseyFb0CqKOsBZ2Ns2jD8s=</dsig:DigestValue>
+        <dsig:DigestValue>JwcyKC033zrTUbmXCq6lM84kBDQKnkKoKyhomJNOMNU=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
