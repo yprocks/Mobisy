@@ -84,6 +84,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="AppPages\Accessories.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="AppPages\Sales.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -117,10 +121,13 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AppCodes\ID.cs" />
-    <Compile Include="AppCodes\Accessories.cs" />
+    <Compile Include="AppCodes\Accessory.cs" />
     <Compile Include="AppCodes\Mobile.cs" />
     <Compile Include="AppCodes\MyConnection.cs" />
     <Compile Include="AppCodes\Repair.cs" />
+    <Compile Include="AppPages\Accessories.xaml.cs">
+      <DependentUpon>Accessories.xaml</DependentUpon>
+    </Compile>
     <Compile Include="AppPages\Sales.xaml.cs">
       <DependentUpon>Sales.xaml</DependentUpon>
     </Compile>

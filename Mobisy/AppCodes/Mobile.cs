@@ -257,7 +257,6 @@ namespace Mobisy.AppCodes
             }
         }
 
-
         private String GetDate()
         {
             return System.DateTime.Now.Date.ToString("yyyy-MM-dd");

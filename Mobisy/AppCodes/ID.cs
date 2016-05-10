@@ -16,6 +16,7 @@ namespace Mobisy.AppCodes
         int d_id;
         int r_id;
         int m_id;
+        int a_id;
 
         public ID()
         {
@@ -184,6 +185,37 @@ namespace Mobisy.AppCodes
             }
             return m_id;
         }
+
+        public int GetAccessoriesID(String acc_name)
+        {
+            con = mycon.GetConnection();
+            try
+            {
+                con.Open();
+
+                //MessageBox.Show("Connection Open ! ");
+                MySqlCommand cmd = con.CreateCommand();
+                cmd.CommandText = "SELECT accessories_id from accessories where accessories_name = '" + acc_name + "'";
+
+                MySqlDataReader reader = cmd.ExecuteReader();
+
+
+                while (reader.Read())
+                {
+                    //companies.Add(reader.GetString(0));
+                    a_id = reader.GetInt32(0);
+                }
+
+                //cb_company.ItemsSource = companies;
+
+                con.Close();
+            }
+            catch (Exception ex)
+            {
+            }
+            return a_id;
+        }
+
 
     }
 }

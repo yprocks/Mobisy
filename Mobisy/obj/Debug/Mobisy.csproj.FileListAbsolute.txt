@@ -27,3 +27,5 @@ C:\Users\YASH PATEL\Documents\Visual Studio 2013\Projects\Mobisy\Mobisy\obj\Debu
 C:\Users\YASH PATEL\Documents\Visual Studio 2013\Projects\Mobisy\Mobisy\obj\Debug\AppPages\Mobiles.g.cs
 C:\Users\YASH PATEL\Documents\Visual Studio 2013\Projects\Mobisy\Mobisy\obj\Debug\AppPages\Sales.baml
 C:\Users\YASH PATEL\Documents\Visual Studio 2013\Projects\Mobisy\Mobisy\obj\Debug\AppPages\Sales.g.cs
+C:\Users\YASH PATEL\Documents\Visual Studio 2013\Projects\Mobisy\Mobisy\obj\Debug\AppPages\Accessories.baml
+C:\Users\YASH PATEL\Documents\Visual Studio 2013\Projects\Mobisy\Mobisy\obj\Debug\AppPages\Accessories.g.cs

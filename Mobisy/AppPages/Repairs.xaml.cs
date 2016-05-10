@@ -305,10 +305,8 @@ namespace Mobisy.AppPages
             base.OnPreviewTextInput(e);
 
         }
-
         
         /**************************View***Repairs******************************/
-
 
         private void LoadAdapter(string queryString, MySqlConnection con)
         {
@@ -472,7 +470,6 @@ namespace Mobisy.AppPages
             cb_dateSelector.SelectedIndex = 0;
             tb_search.Text = "";
         }
-
 
         // Sorting date and fate
         private void cb_dateSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)

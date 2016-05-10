@@ -27,7 +27,7 @@ namespace Mobisy.AppPages
         MySqlConnection con1, con2, con3;
         ID id;
         Mobile mobile;
-        Accessories acc;
+        Accessory acc;
 
         int d_id, f_id;
         string company;
@@ -41,7 +41,8 @@ namespace Mobisy.AppPages
             mycon3 = new MyConnection();
             id = new ID();
             mobile = new Mobile();
-            acc = new Accessories();
+            acc = new Accessory();
+
             company = "";
 
             compSelected = false;
@@ -49,6 +50,8 @@ namespace Mobisy.AppPages
             dealerSelected = false;
             IMEISelected = false;
             phoneValid = true;
+
+            PopulateAcc();
             
         }
 
@@ -71,6 +74,7 @@ namespace Mobisy.AppPages
             accessories_panel.Visibility = System.Windows.Visibility.Visible;
             mobile_panel.Visibility = System.Windows.Visibility.Hidden;
 
+            PopulateAcc();
 
         }
 
@@ -411,6 +415,179 @@ namespace Mobisy.AppPages
             }
         }
 
-      
+
+        private void PopulateAcc()
+        {
+            con3 = mycon3.GetConnection();
+            try
+            {
+                con3.Open();
+
+                //MessageBox.Show("Connection Open ! ");
+                MySqlCommand cmd = con3.CreateCommand();
+                cmd.CommandText = "SELECT accessories_name FROM accessories";
+                MySqlDataReader reader = cmd.ExecuteReader();
+
+                cb_itemname.Items.Clear();
+
+                if (reader.HasRows)
+                {
+                    cb_itemname.Items.Add("Select");
+
+                    while (reader.Read())
+                    {
+                        //companies.Add(reader.GetString(0));
+                        cb_itemname.Items.Add(reader.GetString(0));
+                    }
+                }
+                else
+                {
+                    cb_itemname.Items.Add("No Items Found");
+                }
+
+                cb_itemname.SelectedIndex = 0;
+
+                con3.Close();
+            }
+            catch (MySqlException ex)
+            {
+                MessageBox.Show("Can not open connection ! " + ex.Message);
+            }
+        }
+
+        private void cb_itemname_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cb_itemname.SelectedIndex != 0)
+            {
+                tb_quantity.Text = "1";
+                PopulateAccessoriesPrice();
+            }
+            else
+            {
+                tb_quantity.Text = "";
+                tb_itemCP.Text = "";
+                tb_itemSP.Text = "";
+            }
+        }
+
+        private void PopulateAccessoriesPrice()
+        {
+            int quantity = Convert.ToInt32(tb_quantity.Text);
+
+            int sell_price = Convert.ToInt32(GetSellingPrice(id.GetAccessoriesID((String)cb_itemname.SelectedValue)));
+            double cost_price = Convert.ToDouble(GetCostPrice(id.GetAccessoriesID((String)cb_itemname.SelectedValue))); ;
+            // System.Diagnostics.Debug.WriteLine("SP " + sell_price);
+            int total_price = sell_price * quantity;
+            // System.Diagnostics.Debug.WriteLine("TP " + total_price);
+
+            if (quantity > 1)
+            {
+                total_price = total_price - 3;
+            }
+
+            if (quantity > 3)
+            {
+                total_price = total_price - 6;
+            }
+
+            if (quantity > 5)
+            {
+                total_price = total_price - 10;
+            }
+
+            tb_itemCP.Text = "" + quantity * cost_price;
+            tb_itemSP.Text = "" + total_price;
+
+        }
+
+        private int GetSellingPrice(int id)
+        {
+            int acc_price = 0;
+            con3 = mycon3.GetConnection();
+            try
+            {
+
+                con3.Open();
+                MySqlCommand cmd = con3.CreateCommand();
+                cmd.CommandText = "SELECT selling_price FROM accessories where accessories_id = " + id;
+                MySqlDataReader reader = cmd.ExecuteReader();
+                
+                while (reader.Read())
+                {
+                    acc_price = Convert.ToInt32(reader.GetString(0));
+                }
+
+                con3.Close();
+            }
+            catch (MySqlException ex)
+            {
+                MessageBox.Show("Can not open connection ! " + ex.Message);
+            }
+
+            return acc_price;
+        }
+
+        private double GetCostPrice(int id)
+        {
+            double acc_price = 0;
+            con3 = mycon3.GetConnection();
+            try
+            {
+
+                con3.Open();
+                MySqlCommand cmd = con3.CreateCommand();
+                cmd.CommandText = "SELECT cost_price FROM accessories where accessories_id = " + id;
+                MySqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    acc_price = Convert.ToDouble(reader.GetString(0));
+                }
+
+                con3.Close();
+            }
+            catch (MySqlException ex)
+            {
+                MessageBox.Show("Can not open connection ! " + ex.Message);
+            }
+
+            return acc_price;
+        }
+
+        private void tb_quantity_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (!String.IsNullOrEmpty(tb_quantity.Text))
+                PopulateAccessoriesPrice();
+            else { 
+                tb_itemSP.Text = "";
+                tb_itemCP.Text = "";
+            }
+        }
+
+        private void ResetItems()
+        {
+            cb_itemname.SelectedIndex = 0;
+            tb_quantity.Text = "";
+            tb_itemCP.Text = "";
+            tb_itemSP.Text = "";
+        }
+
+        private void btn_acc_reset_Click(object sender, RoutedEventArgs e)
+        {
+            ResetItems();
+        }
+
+        private void btn_acc_sell_Click(object sender, RoutedEventArgs e)
+        {
+            if(cb_itemname.SelectedIndex !=0 && !String.IsNullOrEmpty(tb_itemCP.Text) && !String.IsNullOrEmpty(tb_itemSP.Text) && !String.IsNullOrEmpty(tb_quantity.Text))
+            {
+                acc.AddSales(cb_itemname.SelectedValue.ToString(), Convert.ToDouble(tb_itemCP.Text), Convert.ToInt32(tb_itemSP.Text));
+                Reset();
+            }
+            else
+            {
+                MessageBox.Show("Please check All fields");
+            }
+        }
     }
 }

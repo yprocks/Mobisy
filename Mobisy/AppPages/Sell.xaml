@@ -43,14 +43,14 @@
             <Label Content="Selling Price" HorizontalAlignment="Left" Margin="334,136,0,0" VerticalAlignment="Top" Height="30" FontSize="14" RenderTransformOrigin="0.553,-0.533"/>
             <Label Content="Cost Price" HorizontalAlignment="Left" Margin="334,100,0,0" VerticalAlignment="Top" Height="30" FontSize="14"/>
 
-            <ComboBox x:Name="cb_itemname" HorizontalAlignment="Left" Margin="440,30,0,0" VerticalAlignment="Top" Width="150" Height="26" FontSize="14"/>
+            <ComboBox x:Name="cb_itemname" HorizontalAlignment="Left" Margin="440,30,0,0" VerticalAlignment="Top" Width="150" Height="26" FontSize="14" SelectionChanged="cb_itemname_SelectionChanged"/>
             <TextBox x:Name="tb_itemCP" HorizontalAlignment="Left" Margin="440,106,0,0" VerticalAlignment="Top" Width="150" Height="24" FontSize="14"/>
             <TextBox x:Name="tb_itemSP" HorizontalAlignment="Left" Margin="440,140,0,0" VerticalAlignment="Top" Width="150" Height="26" FontSize="14"/>
 
-            <Button x:Name="btn_acc_reset" Content="Reset" HorizontalAlignment="Left" Margin="434,194,0,0" VerticalAlignment="Top" Width="76" Height="30" FontSize="14" Click="btn_reset_Click"/>
-            <Button x:Name="btn_acc_sell" Content="Sell" HorizontalAlignment="Left" Margin="514,194,0,0" VerticalAlignment="Top" Width="76" Height="30" FontSize="14"/>
+            <Button x:Name="btn_acc_reset" Content="Reset" HorizontalAlignment="Left" Margin="434,194,0,0" VerticalAlignment="Top" Width="76" Height="30" FontSize="14" Click="btn_acc_reset_Click"/>
+            <Button x:Name="btn_acc_sell" Content="Sell" HorizontalAlignment="Left" Margin="514,194,0,0" VerticalAlignment="Top" Width="76" Height="30" FontSize="14" Click="btn_acc_sell_Click" />
             <Label Content="Quantity" HorizontalAlignment="Left" Margin="334,64,0,0" VerticalAlignment="Top" Height="30" FontSize="14"/>
-            <TextBox x:Name="tb_quantity" HorizontalAlignment="Left" Margin="440,70,0,0" VerticalAlignment="Top" Width="150" Height="24" FontSize="14" RenderTransformOrigin="0.46,-1" SpellCheck.IsEnabled="True"/>
+            <TextBox x:Name="tb_quantity" HorizontalAlignment="Left" Margin="440,70,0,0" VerticalAlignment="Top" Width="150" Height="24" FontSize="14" RenderTransformOrigin="0.46,-1" SpellCheck.IsEnabled="True" TextChanged="tb_quantity_TextChanged" PreviewKeyDown="tb_PreviewKeyDown" PreviewTextInput="tb_price_PreviewTextInput"/>
 
 
         </Grid>

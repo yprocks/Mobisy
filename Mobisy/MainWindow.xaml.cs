@@ -64,11 +64,11 @@ namespace Mobisy
             main_content.Content = null;
         }
 
-        private void stock_click(object sender, RoutedEventArgs e)
+        private void acc_click(object sender, RoutedEventArgs e)
         {
-            page_title.Content = "Stock";
+            page_title.Content = "Accessories";
             main_content.Content = null;
-            main_content.Content = new Stock();
+            main_content.Content = new Accessories();
         }
 
         private void orderlist_click(object sender, RoutedEventArgs e)
